@@ -66,7 +66,7 @@ ls output/
 2021-12-13-21-40.csv # processed data
 ```
 
-计算两次压测之间的 diff:
+计算两次压测之间的 diff，输出结果为当前的数据加上变化的百分比值:
 
 ```bash
 # Usage: python3 ./scripts/reports/diff.py target.csv current.csv

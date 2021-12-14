@@ -20,7 +20,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
-def diff(from_csv: str, to_csv: str):
+def diff(from_csv, to_csv):
     from_reader = list(csv.reader(open(from_csv)))
     to_reader = csv.reader(open(to_csv))
     results = []
@@ -31,23 +31,23 @@ def diff(from_csv: str, to_csv: str):
         result.append(line[1])  # concurrency
         result.append(line[2])  # data size
 
-        result.append(format_diff(from_reader[line_num][3], line[3]))  # tps
-        result.append(format_diff(from_reader[line_num][4], line[4]))  # p99
-        result.append(format_diff(from_reader[line_num][5], line[5]))  # p999
+        result.append(diff_cell(from_reader[line_num][3], line[3]))  # tps
+        result.append(diff_cell(from_reader[line_num][4], line[4]))  # p99
+        result.append(diff_cell(from_reader[line_num][5], line[5]))  # p999
 
         results.append(result)
 
     print_csv(results)
 
 
-def format_diff(old: str, now: str):
+def diff_cell(old, now):
     old, now = float(old), float(now)
     percent = (now - old) / old * 100
     flag = '+' if percent >= 0 else ''
     return '{}{}({}{:.1f}%){}'.format(now, bcolors.WARNING, flag, percent, bcolors.ENDC)
 
 
-def print_csv(results: list):
+def print_csv(results):
     results.sort(key=lambda result: result[0])
     cell_size = 15
     for line in results:
@@ -63,7 +63,9 @@ def print_csv(results: list):
 
 def main():
     if len(sys.argv) < 3:
-        print('invalid cmd')
+        print('''Usage:
+diff.py {baseline.csv} {current.csv} 
+''')
         return
     from_csv = sys.argv[1]
     to_csv = sys.argv[2]
