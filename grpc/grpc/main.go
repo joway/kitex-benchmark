@@ -36,7 +36,7 @@ const (
 var recorder = perf.NewRecorder("GRPC@Server")
 
 type server struct {
-	grpcg.UnimplementedEchoServer
+	grpcg.EchoServer
 }
 
 func (s *server) Echo(ctx context.Context, req *grpcg.Request) (*grpcg.Response, error) {
